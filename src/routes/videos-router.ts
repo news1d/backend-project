@@ -112,6 +112,14 @@ videosRouter.put('/:id', (req: RequestWithParamsAndBody<URIParamsVideoIdModel, U
         });
     }
 
+    // Проверка на тип canBeDownloaded (должно быть boolean)
+    if (req.body.canBeDownloaded !== undefined && typeof (req.body.canBeDownloaded as any) !== 'boolean') {
+        errors.push({
+            message: 'canBeDownloaded must be a boolean value',
+            field: 'canBeDownloaded'
+        });
+    }
+
     // Если availableResolutions массив, то filter() присваивает переменной все значения, которые совпали с Resolutions, иначе null
     const availableResolutions = Array.isArray(req.body.availableResolutions)
         ? req.body.availableResolutions.filter((res: string) => Object.values(Resolutions).includes(res as Resolutions))

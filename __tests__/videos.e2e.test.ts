@@ -429,6 +429,41 @@ describe('/videos', () => {
             })
     })
 
+    it('shouldn`t update video with incorrect download status', async () => {
+        // Добавляем видео
+        const data: CreateVideoInputModel = {
+            title: 'Robinzon Kruzo',
+            author: 'Daniel Defo'
+        }
+
+        const createResponse = await videosTestManager.createVideo(data)
+        const createdVideo = createResponse.body
+
+        const dataForUpdate = {
+            title: 'Robinzon Kruzo',
+            author: 'Daniel Defo',
+            availableResolutions: ["P144","P240","P720"],
+            canBeDownloaded: "string",
+            minAgeRestriction:17,
+            publicationDate: '2024-10-16T22:15:21.907Z'
+        }
+
+        await request(app)
+            .put(`${SETTINGS.PATH.VIDEOS}/${createdVideo.id}`)
+            .send(dataForUpdate)
+            .expect(HTTP_STATUSES.BAD_REQUEST_400, {
+                errorsMessages: [
+                    {
+                        message: 'canBeDownloaded must be a boolean value',
+                        field: 'canBeDownloaded'
+                    }
+                ]
+            })
+
+
+
+    })
+
     it('should update video with correct data', async () => {
         // Добавляем видео
         const data: CreateVideoInputModel = {
