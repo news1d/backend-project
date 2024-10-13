@@ -22,32 +22,20 @@ videosRouter.post('/', (req: RequestWithBody<CreateVideoInputModel>,
 
     const errors : FieldError[] = [];
 
-    if (!req.body.title || req.body.title.length > 40) {
+    if (!req.body.title.trim() || req.body.title.trim().length > 40) {
         errors.push({
             message: "The value is missing or the maximum allowed size has been exceeded",
             field: 'title'
         });
     }
 
-    if (!req.body.author || req.body.author.length > 20) {
+    if (!req.body.author.trim() || req.body.author.trim().length > 20) {
         errors.push({
             message: "The value is missing or the maximum allowed size has been exceeded",
             field: 'author'
         });
     }
 
-    // // Если availableResolutions массив, то filter() присваивает переменной все значения, которые совпали с Resolutions, иначе null
-    // const availableResolutions = Array.isArray(req.body.availableResolutions)
-    //     ? req.body.availableResolutions.filter((res: string) => Object.values(Resolutions).includes(res as Resolutions))
-    //     : null;
-    //
-    // // Если availableResolutions !== null, то оно должно содержать хотя бы одно значение
-    // if (availableResolutions && availableResolutions.length === 0) {
-    //     errors.push({
-    //         message: "At least one valid resolution must be added",
-    //         field: "availableResolutions"
-    //     });
-    // }
 
     if (req.body.availableResolutions !== undefined) {
         if (!Array.isArray(req.body.availableResolutions)
@@ -61,16 +49,6 @@ videosRouter.post('/', (req: RequestWithBody<CreateVideoInputModel>,
         }
     }
 
-
-
-    // if (!Array.isArray(req.body.availableResolutions)
-    //     || req.body.availableResolutions.find(p => !Resolutions[p])
-    // ) {
-    //     errors.push({
-    //         message: "At least one valid resolution must be added",
-    //         field: "availableResolutions"
-    //     })
-    // }
 
     if (errors.length > 0) {
         res.status(HTTP_STATUSES.BAD_REQUEST_400).json({errorsMessages: errors});
@@ -99,10 +77,10 @@ videosRouter.get('/:id', (req: RequestWithParams<URIParamsVideoIdModel>, res: Re
     const foundVideo = findVideoById(+req.params.id)
 
     if (!foundVideo) {
-        res.sendStatus(404)
+        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
         return;
     }
-    res.status(200).json(foundVideo)
+    res.status(HTTP_STATUSES.OK_200).json(foundVideo)
 
 })
 
@@ -119,14 +97,14 @@ videosRouter.put('/:id', (req: RequestWithParamsAndBody<URIParamsVideoIdModel, U
     const errors : FieldError[] = [];
 
     // Проверка на наличие title и author, а также их максимальную длину
-    if (!req.body.title || req.body.title.length > 40) {
+    if (!req.body.title.trim() || req.body.title.trim().length > 40) {
         errors.push({
             message: 'The value is missing or the maximum allowed size has been exceeded',
             field: 'title'
         });
     }
 
-    if (!req.body.author || req.body.author.length > 20) {
+    if (!req.body.author.trim() || req.body.author.trim().length > 20) {
         errors.push({
             message: 'The value is missing or the maximum allowed size has been exceeded',
             field: 'author'
