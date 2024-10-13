@@ -36,18 +36,6 @@ videosRouter.post('/', (req: RequestWithBody<CreateVideoInputModel>,
         });
     }
 
-    // // Если availableResolutions массив, то filter() присваивает переменной все значения, которые совпали с Resolutions, иначе null
-    // const availableResolutions = Array.isArray(req.body.availableResolutions)
-    //     ? req.body.availableResolutions.filter((res: string) => Object.values(Resolutions).includes(res as Resolutions))
-    //     : null;
-    //
-    // // Если availableResolutions !== null, то оно должно содержать хотя бы одно значение
-    // if (availableResolutions && availableResolutions.length === 0) {
-    //     errors.push({
-    //         message: "At least one valid resolution must be added",
-    //         field: "availableResolutions"
-    //     });
-    // }
 
     if (req.body.availableResolutions !== undefined) {
         if (!Array.isArray(req.body.availableResolutions)
@@ -61,16 +49,6 @@ videosRouter.post('/', (req: RequestWithBody<CreateVideoInputModel>,
         }
     }
 
-
-
-    // if (!Array.isArray(req.body.availableResolutions)
-    //     || req.body.availableResolutions.find(p => !Resolutions[p])
-    // ) {
-    //     errors.push({
-    //         message: "At least one valid resolution must be added",
-    //         field: "availableResolutions"
-    //     })
-    // }
 
     if (errors.length > 0) {
         res.status(HTTP_STATUSES.BAD_REQUEST_400).json({errorsMessages: errors});
