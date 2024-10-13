@@ -56,6 +56,25 @@ describe('/videos', () => {
                     }
                 ]
             })
+
+        // В поле названия передается null
+        const dataWithNullTitle = {
+            title: null,
+            author: 'Vadim Zeland',
+            availableResolutions: ["P144","P240","P720"]
+        }
+
+        await request(app)
+            .post(SETTINGS.PATH.VIDEOS)
+            .send(dataWithNullTitle)
+            .expect(HTTP_STATUSES.BAD_REQUEST_400, {
+                errorsMessages: [
+                    {
+                        message: "The value is missing or the maximum allowed size has been exceeded",
+                        field: 'title'
+                    }
+                ]
+            })
     })
 
     it('shouldn`t create video with incorrect author data', async () => {
@@ -138,7 +157,7 @@ describe('/videos', () => {
             title: 'Transurfing reality',
             author: 'Vadim Zeland'
         }
-        const createResponse = await videosTestManager.createVideo(data)
+         await videosTestManager.createVideo(data)
 
         // Добавление видео с массивом разрешений
         const newData: CreateVideoInputModel = {
@@ -146,7 +165,7 @@ describe('/videos', () => {
             author: 'Vadim Zeland',
             availableResolutions: ['P144', 'P240', 'P360']
         }
-        const res = await videosTestManager.createVideo(newData)
+        await videosTestManager.createVideo(newData)
     })
 
     it('should return 200 and video by id', async () => {
@@ -435,7 +454,7 @@ describe('/videos', () => {
         await videosTestManager.updateVideo(dataForUpdate, createdVideo.id)
 
         // Вызываем обновленное видео
-        const updatedResponse = await request(app)
+        await request(app)
             .get(`${SETTINGS.PATH.VIDEOS}/${createdVideo.id}`)
             .expect(HTTP_STATUSES.OK_200, {
                 ...createdVideo,
