@@ -10,9 +10,6 @@ export enum Resolutions {
 }
 
 export type ResolutionsString = keyof typeof Resolutions;
-// const x = Resolutions.P144
-// const y = Resolutions[x]
-// const z = Resolutions['P144']
 
 export type Video = {
     id: number,
@@ -24,18 +21,6 @@ export type Video = {
     publicationDate: string,
     availableResolutions: ResolutionsString[] | null
 }
-
-// // эта типизация не задана
-// export type OutputVideoType = {
-//     id: number,
-//     title: string,
-//     author: string,
-//     canBeDownloaded: boolean,
-//     minAgeRestriction: null,
-//     createdAt: string,
-//     publicationDate: string,
-//     availableResolutions: ResolutionsString[] | null
-// }
 
 export type CreateVideoInputModel = {
     title: string,
